@@ -1,27 +1,29 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchCall } from "../Utils/fetchCall";
+import { deleteEvent, getEvents } from "../Redux/event/eventAction";
+import {getEventDetails} from "../Redux/event/eventAction"
 
 const Dashboard = () => {
   const history = useHistory(),
     [events, setEvents] = useState([]),
-    [error, setError] = useState();
+    dispatch = useDispatch(),
+    data = useSelector((state)=>state.eventReducer)
 
-  const getEvents = async()=>{
-    const data = await fetchCall('/events','GET')
-    if (data.events) {
-      setEvents(data.events)
-    } else {
-        setError(data.error)
-    }
-  }
+  const get_Events = async()=>{
+    dispatch(getEvents())
+  } 
 
   useEffect(() => {
       //Calling API
-      getEvents()
+      get_Events()
+
+      if(data.events){
+        setEvents(data.events)
+      }
       
-  }, [events]);
+  }, [data.events]);
 
   //Click functions
   //Showing calendar page
@@ -30,16 +32,16 @@ const Dashboard = () => {
   };
   //Deleting event
   const handleEventsDelete = async(id) => {
-    await fetchCall("/event/"+id, "DELETE")
+    dispatch(deleteEvent(id))
   };
   //Takes to the edit page
   const handleEventsEdit = (id) => {
+    dispatch(getEventDetails(id))
     history.push("/event/" + id);
   };
 
   return (
     <div className="dashboard">
-      {error && <h1 className="error">{error}</h1>}
       {events &&
         events.map((event) => (
           <div className="event-div" key={event._id}>

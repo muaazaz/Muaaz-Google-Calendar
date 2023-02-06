@@ -5,6 +5,8 @@ const Input = ({label, value, readOnly, onChange, placeholder, maxLength, type})
             <input  
               type={type}
               className="inp"
+              name={label}
+              autoComplete="on"
               maxLength={maxLength}
               value={value}
               required

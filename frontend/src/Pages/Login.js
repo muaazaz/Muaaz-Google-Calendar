@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Input from "../Components/Shared_Components/Input"
-import { getCookiesData, removeCookiesData} from "../Utils/cookies";
-import { fetchCall } from "../Utils/fetchCall";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn } from "../Redux/user/userAction";
 
 const Login = () => {
   const history = useHistory(),
+    dispatch = useDispatch(),
+    data = useSelector((state) => state.userValidation),
     [email, setEmail] = useState(""),
     [password, setPass] = useState(""),
     [userName, setUserName] = useState(""),
@@ -15,19 +17,16 @@ const Login = () => {
     [isEmail, setIsEmail] = useState(false),
     [isHidden, setIsHidden] = useState(true)
 
+    useEffect(()=>{
+      if(data.token){
+          history.push('/')
+      }else{
+          setError((v)=> data.error)
+      }
+  },[data])
+
   const handleSubmit = async () => {
-
-    const data = await fetchCall("/login", "POST", { email, userName, password })
-    
-    const { id } = getCookiesData()
-
-    if (data.user && id === data.user._id) {
-      history.push("/");
-      window.location.reload()
-    } else {
-      removeCookiesData()
-      setError((v) => data.error);
-    }
+    dispatch(logIn({  email, userName, password }))
   };
 
   const handleEmail = () => {

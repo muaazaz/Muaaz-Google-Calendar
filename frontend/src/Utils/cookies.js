@@ -16,6 +16,5 @@ export const getCookiesData = () => {
 export const removeCookiesData = () => {
     Cookies.remove('jwt')
     Cookies.remove('email')
-    Cookies.set('loggedIn', false)
     return {}
 }

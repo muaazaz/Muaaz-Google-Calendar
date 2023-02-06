@@ -22,14 +22,7 @@ const post_signup=async (req, res)=>{
         res.status(200).send({user})
     } catch (err) {
      var error = err.message
-     if(error.includes('password')){
-        error = 'Not a strong password'
-     }else if(error.includes('email')){
-        error = 'Please enter a valid email'
-     }else{
-        error ='Name cannot contain a special character or a number'
-     }
-     res.status(400).send({error})   
+     res.status(400).send({error}) 
     }
 }
 

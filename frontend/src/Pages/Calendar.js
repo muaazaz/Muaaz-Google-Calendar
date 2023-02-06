@@ -1,57 +1,49 @@
-import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { CalendarContext } from "../Context/CalendarContext";
-import { fetchCall } from "../Utils/fetchCall";
+import { useSelector } from "react-redux";
+import { createAllDayEvent, createEvents, createTime, getCurrentDate } from "../Utils/events";
 
 const Calendar = () => {
     var arr2 = [];
     var arr1 = [];
-    const [timelyEvents, setTimelyEvents] = useState([]),
-    [allDayEvents, setAllDayEvents] = useState([]),
-    [once, setOnce] = useState(true),
-    [error, setError] = useState(''),
-    [date, setDate] = useState(''),
-    { createTime, createAllDayEvent, createEvents, getCurrentDate } = useContext(CalendarContext)
+    const [timelyEvents, setTimelyEvents] = useState(null),
+        data = useSelector((state) => state.eventReducer),
+        [allDayEvents, setAllDayEvents] = useState([]),
+        [once, setOnce] = useState(true),
+        [date, setDate] = useState('')
 
-
-    const getData = async () => {
-        const data = await fetchCall('/events','GET')
-        if (data.events) {
-            data.events.forEach((event) => {
-                if (event.allDay) {
-                    arr1.push(event)
-                } else {
-                    arr2.push(event)
-                }
-            })
-            setTimelyEvents(arr2)
-            setAllDayEvents(arr1)
-        } else {
-            setError(data.error)
-        }
+    const setData = async () => {
+        console.log(data.events);
+        data.events.forEach((event) => {
+            if (event.allDay) {
+                arr1.push(event)
+            } else {
+                arr2.push(event)
+            }
+        })
+        setTimelyEvents(arr2)
+        setAllDayEvents(arr1)
     }
 
     useEffect(() => {
-        if (once) {
-            setDate(getCurrentDate)
-            //Calling API
-            getData()
+        if(data.events && once){
+            setDate(getCurrentDate())
             //Making sure API is called only once
             setOnce(false)
+            //Generate timetable
+            createTime()
+            
+            setData()
         }
-        //Generate timetable
-        createTime()
         //Create Daily events
         createAllDayEvent(allDayEvents);
         //Creating timely events
-        createEvents(timelyEvents);
-
-    }, [timelyEvents, allDayEvents])
+        // console.log(timelyEvents);
+         createEvents(timelyEvents);
+    },[allDayEvents, timelyEvents])
 
     return (
         <div className="main">
-            <div className="error">{error}</div>
             <div id="date">
                 <p id="dt">{date}</p>
             </div>

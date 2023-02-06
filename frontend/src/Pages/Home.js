@@ -5,7 +5,6 @@ const Home = () => {
     
     const handleClick = ()=>{
         history.push('/dashboard')
-        window.location.reload()
     }
     return ( 
         <div className="home">

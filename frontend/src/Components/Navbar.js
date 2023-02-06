@@ -1,22 +1,24 @@
 import { Link, useHistory } from 'react-router-dom'
 import { useEffect } from "react";
-import { getCookiesData, removeCookiesData } from '../Utils/cookies';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../Redux/user/userAction';
 
 const Navbar = () => {
     const history = useHistory(),
+        dispatch = useDispatch(),
+        data = useSelector((state)=>state.userValidation),
         [email, setEmail] = useState(''),
         [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(() => {
-        const { email} = getCookiesData()
-
-        setEmail(email)
-        if(email){
+        setEmail(data.email)
+        if(data.token){
             setLoggedIn(true)
+        }else{
+            setLoggedIn(false)
         }
-
-    }, [loggedIn])
+    }, [data,email])
     return (
         <nav className="navbar">
             <img src="" alt="" />
@@ -35,7 +37,7 @@ const Navbar = () => {
                             </li>
                             <li>
                                 <button className='lgot' onClick={() => {
-                                    removeCookiesData()
+                                    dispatch(logOut())
                                     setLoggedIn(false)
                                     history.push("/");
                                 }}>Log Out</button>

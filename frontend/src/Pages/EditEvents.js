@@ -1,16 +1,19 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../Components/Shared_Components/Input";
 import Select from "../Components/Shared_Components/Select";
-import { eventContext } from "../Context/eventContext";
-import { fetchCall } from "../Utils/fetchCall";
+import { getLocations } from "../Utils/location";
+import { editEvent } from "../Redux/event/eventAction"
 
 const EditEvents = () => {
+  var strt = ''
   const { id } = useParams(),
+    data = useSelector((state) => state.eventReducer),
+    dispatch = useDispatch(),
     history = useHistory(),
-    { uniqueLoc, createLocations, handleStartTimeChange, strt } = useContext(eventContext),
+    [browserLocations, setBrowserLocations] = useState([]),
     [allDay, setAllDay] = useState(false),
     [item, setItem] = useState(""),
     [location, setLoc] = useState(""),
@@ -18,6 +21,10 @@ const EditEvents = () => {
     [end, setEnd] = useState(""),
     [once, setOnce] = useState(true),
     [error, setError] = useState();
+
+  const calllLocationApi = async () => {
+    await setBrowserLocations(await getLocations())
+  }
 
   //Setting previous state of data
   const setPrevious = (event) => {
@@ -28,31 +35,22 @@ const EditEvents = () => {
     setAllDay(event.allDay);
   };
 
-  //Calling api for data
-  const getEventDetails = async () => {
-    const data = await fetchCall("/event/" + id, "GET")
-    if (data.event) {
-      setPrevious(data.event);
-    } else {
-      setError(data.error);
-    }
-  }
-
   useEffect(() => {
     if (once) {
-
-      getEventDetails()
       //TO render only once
       setOnce(false);
       //Calling api to create locations selector
-      createLocations()
+      calllLocationApi()
     }
-  });
+    if (data.eventDetails) {
+      setPrevious(data.eventDetails)
+    }
+  }, [data.eventDetails]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     //Calling API to update event data 
-    await fetchCall("/event/" + id, "PUT", { start, end, item, location, strt })
+    dispatch(editEvent({ id, start, end, item, location, strt }))
     history.push("/dashboard");
   };
 
@@ -88,7 +86,19 @@ const EditEvents = () => {
               onChange={(e) => {
                 setError((e) => (undefined))
                 setStart(e.target.value)
-                handleStartTimeChange(e)
+                var id = "";
+                document.querySelectorAll(".start").forEach((opt) => {
+                  if (opt.value === e.target.value) {
+                    id = opt.id;
+                    strt = id;
+                  }
+                });
+                document.querySelectorAll(".end").forEach((opt) => {
+                  if (parseFloat(opt.id) <= parseFloat(id)) {
+                    opt.disabled = true;
+                  }
+                });
+                document.querySelector(".end-time").disabled = false;
               }}
             />
             <Select
@@ -107,7 +117,7 @@ const EditEvents = () => {
         <Autocomplete
           disablePortal
           value={location}
-          options={uniqueLoc}
+          options={browserLocations}
           sx={{ width: "100%", padding: "0" }}
           renderInput={(params) => <TextField {...params} label="Location" />}
           onChange={(e) => {

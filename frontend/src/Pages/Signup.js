@@ -1,12 +1,15 @@
-import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
 import PasswordChecklist from "react-password-checklist"
-import { fetchCall } from "../Utils/fetchCall";
-import { getCookiesData, setCookies } from "../Utils/cookies";
 import Input from '../Components/Shared_Components/Input'
+import { useDispatch, useSelector } from "react-redux";
+import { signUp } from "../Redux/user/userAction";
+import { useHistory } from "react-router-dom";
 
 const Signup = () => {
-    const history = useHistory(),
+
+    const dispatch = useDispatch(),
+        history = useHistory(),
+        data = useSelector((state) => state.userValidation),
         [email, setEmail] = useState(''),
         [password, setPass] = useState(""),
         [passwordAgain, setPasswordAgain] = useState(""),
@@ -17,32 +20,36 @@ const Signup = () => {
         [userName, setUserName] = useState(''),
         current = new Date().toISOString().split("T")[0]
 
+        useEffect(()=>{
+            if(data.token){
+                history.push('/')
+            }else{
+                setError((v)=> data.error)
+            }
+        },[data])
+    //handeling form submition for signUp
     const handleSubmit = async () => {
         if (firstName === lastName) {
             setError((v) => ('First-name and Last-name cannot be same'))
         } else {
-            const data = await fetchCall('/signup', 'POST', { firstName, lastName, userName, birthdate, email, password })
-            if (data.user) {
-                const { id } = getCookiesData()
-                if (id === data.user._id) {
-                    history.push('/')
-                    window.location.reload()
-                } else {
-                    setError((v) => ('user not found'))
-                }
-            }
+            dispatch(signUp({ firstName, lastName, userName, birthdate, email, password }))
         }
     }
+
+    //seting birthday state
     const handleChange = (e) => {
         setBirth((b) => (e.target.value))
     }
+
     return (
         <div className="create">
             <h1>Sign Up</h1>
-            <form onSubmit={(e) => {
-                e.preventDefault()
-                handleSubmit()
-            }}>
+            <form
+                autoComplete="on"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    handleSubmit()
+                }}>
                 <Input
                     label={'First Name'}
                     value={firstName}

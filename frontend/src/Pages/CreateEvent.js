@@ -1,19 +1,20 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch} from "react-redux";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Autocomplete, TextField } from "@mui/material";
-import { eventContext } from "../Context/eventContext";
 import Input from "../Components/Shared_Components/Input";
 import Select from "../Components/Shared_Components/Select";
-import { fetchCall } from "../Utils/fetchCall";
 import { getCookiesData } from "../Utils/cookies";
-
+import { getLocations } from "../Utils/location";
+import {createEvent} from "../Redux/event/eventAction"
 
 
 const CreateEvent = () => {
-  var strt = '';
-  const { uniqueLoc, createLocations} = useContext(eventContext),
-    history = useHistory(),
+  var strt = ''
+  const history = useHistory(),
+    dispatch = useDispatch(),
+    [browserLocations, setBrowserLocations]=useState([]),
     [allDay, setAllDay] = useState(false),
     [item, setItem] = useState(""),
     [location, setLocation] = useState(""),
@@ -22,23 +23,21 @@ const CreateEvent = () => {
     [owner, setOwner] = useState(""),
     [error, setError] = useState("")
 
+    const calllLocationApi = async()=>{
+      await setBrowserLocations( await getLocations())
+    }
 
   useEffect(() => {
     const { id } = getCookiesData()
     setOwner(id);
-    createLocations()
+    calllLocationApi()
+
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //Calling api
-    const data = await fetchCall("/event", "POST", { start, end, item, location, owner, allDay, strt })
-    //Checking for either data or errors
-    if (data.event) {
-      history.push("/dashboard");
-    } else {
-      setError((e) => data.error);
-    }
+    dispatch(createEvent({ start, end, item, location, owner, allDay, strt }))
+    history.push('/dashboard')
   };
 
   return (
@@ -112,7 +111,7 @@ const CreateEvent = () => {
         }
         <Autocomplete
           disablePortal
-          options={uniqueLoc}
+          options={browserLocations}
           sx={{ width: "100%", marginTop: '20px' }}
           renderInput={(params) => <TextField {...params} label="Location" />}
           onChange={(e) => {

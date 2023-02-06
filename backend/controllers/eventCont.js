@@ -21,7 +21,7 @@ const get_events = async(req, res)=>{
         res.send({error})
     }
 }
-const get_a_event = async(req, res)=>{
+const get_event_details = async(req, res)=>{
     try {
         const event = await Event.findOne({_id:req.params.id})
         res.send({event})
@@ -56,7 +56,7 @@ const edit_event = async(req,res)=>{
         event.location = req.body.location
         event.strt = req.body.strt
         await event.save()
-        res.statut(200).send()
+        res.status(200).send({event})
     } catch (e) {
         if(req.error){
             const error = req.error.mesaage
@@ -69,7 +69,7 @@ const edit_event = async(req,res)=>{
 
 module.exports = {
     create_event,
-    get_a_event,
+    get_event_details,
     get_events,
     delete_event,
     edit_event

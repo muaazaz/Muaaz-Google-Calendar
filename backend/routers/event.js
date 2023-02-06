@@ -8,7 +8,7 @@ router.post('/event',auth, controller.create_event)
 //To fetch all timely events
 router.get('/events',auth, controller.get_events)
 //TO get an event to edit
-router.get('/event/:id',auth, controller.get_a_event)
+router.get('/event/:id',auth, controller.get_event_details)
 //To delete a event from db
 router.delete('/event/:id',auth, controller.delete_event)
 //To edit a timely event in DB
