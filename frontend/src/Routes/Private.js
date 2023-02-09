@@ -1,9 +1,9 @@
 import { Route } from "react-router-dom";
 import { useMemo, useState } from "react";
 import Login from "../Pages/Login";
-import Cookies from "js-cookie";
+import { getCookiesData } from "../Utils/cookies";
 const PrivateRoutes = ({ path, component }) => {
-  const token = Cookies.get('jwt'),
+  const {token} = getCookiesData(),
     [logIn, setLogIn] = useState(false)
   useMemo(() => {
     if (token) {
