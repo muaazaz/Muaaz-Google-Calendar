@@ -8,17 +8,19 @@ import { getLocations } from "../Utils/location";
 import { editEvent } from "../Redux/event/eventAction"
 
 const EditEvents = () => {
-  let strt = ''
   const { id } = useParams(),
     data = useSelector((state) => state.eventReducer),
     dispatch = useDispatch(),
     history = useHistory(),
     [browserLocations, setBrowserLocations] = useState([]),
-    [allDay, setAllDay] = useState(false),
-    [item, setItem] = useState(""),
-    [location, setLoc] = useState(""),
-    [start, setStart] = useState(),
-    [end, setEnd] = useState(""),
+    [formData, setFormData] = useState({
+      allDay: false,
+      item: "",
+      location: "",
+      start: "ALL-DAY",
+      end: "",
+      strt: ""
+    })
     [once, setOnce] = useState(true),
     [error, setError] = useState();
 
@@ -28,11 +30,13 @@ const EditEvents = () => {
 
   //Setting previous state of data
   const setPrevious = (event) => {
-    setItem(event.item);
-    setStart(event.start);
-    setEnd(event.end);
-    setLoc(event.location);
-    setAllDay(event.allDay);
+    setFormData({
+      item: event.item,
+      location: event.location,
+      start: event.start,
+      end: event.end,
+      allDay: event.allDay
+    })
   };
 
   useEffect(() => {
@@ -50,7 +54,7 @@ const EditEvents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //Calling API to update event data 
-    dispatch(editEvent({ id, start, end, item, location, strt }))
+    dispatch(editEvent(formData))
     history.push("/dashboard");
   };
 
@@ -62,9 +66,13 @@ const EditEvents = () => {
           label={'Name'}
           maxLength={30}
           placeholder={"please enter an name for event"}
-          value={item}
+          value={formData.item}
           onChange={(e) => {
-            setItem(e.target.value);
+            setError(undefined)
+            setFormData({
+              ...formData,
+              item: e.target.value
+            })
           }}
         />
         {allDay ?
@@ -80,17 +88,23 @@ const EditEvents = () => {
             <Select
               time={'start'}
               className={"start-time"}
-              value={start}
+              value={formData.start}
               label={'Start'}
               disabled={false}
               onChange={(e) => {
-                setError((e) => (undefined))
-                setStart(e.target.value)
+                setError(undefined)
+                setFormData({
+                  ...formData,
+                  start: e.target.value
+                })
                 let id = "";
                 document.querySelectorAll(".start").forEach((opt) => {
                   if (opt.value === e.target.value) {
                     id = opt.id;
-                    strt = id;
+                    setFormData({
+                      ...formData,
+                      strt: id
+                    })
                   }
                 });
                 document.querySelectorAll(".end").forEach((opt) => {
@@ -104,24 +118,31 @@ const EditEvents = () => {
             <Select
               time={'end'}
               className={"end-time"}
-              value={end}
+              value={formData.end}
               label={'End'}
               disabled={true}
               onChange={(e) => {
-                setError((e) => (undefined))
-                setEnd(e.target.value)
+                setError(undefined)
+                setFormData({
+                  ...formData,
+                  end: e.target.value
+                })
               }}
             />
           </>
         }
         <Autocomplete
           disablePortal
-          value={location}
+          value={formData.location}
           options={browserLocations}
           sx={{ width: "100%", padding: "0" }}
           renderInput={(params) => <TextField {...params} label="Location" />}
           onChange={(e) => {
-            setLoc(e.target.textContent);
+            setError(undefined)
+            setFormData({
+              ...formData,
+              location: e.target.value
+            })
           }}
         />
         {error && <h5 className="error">{error}</h5>}

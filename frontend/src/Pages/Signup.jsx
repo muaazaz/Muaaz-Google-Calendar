@@ -10,35 +10,40 @@ const Signup = () => {
     const dispatch = useDispatch(),
         history = useHistory(),
         data = useSelector((state) => state.userValidation),
-        [email, setEmail] = useState(''),
-        [password, setPass] = useState(""),
-        [passwordAgain, setPasswordAgain] = useState(""),
+        [formData, setFormData] = useState({
+            email: "",
+            password: "",
+            passwordAgain: "",
+            birthdate: "",
+            firstName: "",
+            lastName: "",
+            userName: ""
+        }),
         [error, setError] = useState(''),
-        [birthdate, setBirth] = useState(''),
-        [firstName, setFname] = useState(''),
-        [lastName, setLname] = useState(''),
-        [userName, setUserName] = useState(''),
         current = new Date().toISOString().split("T")[0]
 
         useEffect(()=>{
             if(data.token){
                 history.push('/')
             }else{
-                setError((v)=> data.error)
+                setError(data.error)
             }
         },[data])
     //handeling form submition for signUp
     const handleSubmit = async () => {
         if (firstName === lastName) {
-            setError((v) => ('First-name and Last-name cannot be same'))
+            setError('First-name and Last-name cannot be same')
         } else {
-            dispatch(signUp({ firstName, lastName, userName, birthdate, email, password }))
+            dispatch(signUp(formData))
         }
     }
 
     //seting birthday state
     const handleChange = (e) => {
-        setBirth((b) => (e.target.value))
+        setFormData({
+            ...formData,
+            birthdate: e.target.value
+        })
     }
 
     return (
@@ -52,74 +57,92 @@ const Signup = () => {
                 }}>
                 <Input
                     label={'First Name'}
-                    value={firstName}
+                    value={formData.firstName}
                     maxLength={15}
                     placeholder={'please enter your first name'}
                     onChange={(e) => {
-                        setError((v) => (''))
-                        setFname(e.target.value)
+                        setError('')
+                        setFormData({
+                            ...formData,
+                            firstName: e.target.value
+                        })
                     }}
                 />
                 <Input
                     label={'Last Name'}
-                    value={lastName}
+                    value={formData.lastName}
                     maxLength={15}
                     placeholder={'please enter your last name'}
                     onChange={(e) => {
-                        setError((v) => (''))
-                        setLname(e.target.value)
+                        setError('')
+                        setFormData({
+                            ...formData,
+                            lastName: e.target.value
+                        })
                     }}
                 />
                 <Input
                     label={'User Name'}
-                    value={userName}
+                    value={formData.userName}
                     maxLength={15}
                     placeholder={'please enter a unique User name not more than 15 characters'}
                     onChange={(e) => {
-                        setError((v) => (''))
-                        setUserName(e.target.value)
+                        setError('')
+                        setFormData({
+                            ...formData,
+                            userName: e.target.value
+                        })
                     }}
                 />
                 <Input
                     type={'date'}
                     label={'Date Of Birth'}
-                    value={birthdate}
+                    value={formData.birthdate}
                     onChange={handleChange}
                     max={current}
                 />
                 <Input
                     label={'Email'}
-                    value={email}
+                    value={formData.email}
                     maxLength={30}
                     placeholder={'please enter an email that is unique'}
                     onChange={(e) => {
-                        setError((v) => (''))
-                        setEmail(e.target.value)
+                        setError('')
+                        setFormData({
+                            ...formData,
+                            email: e.target.value
+                        })
                     }}
                 />
                 <Input
                     label={'Password'}
-                    value={password}
+                    value={formData.password}
                     type={'password'}
                     minLength={8}
                     placeholder={'please enter a password'}
                     onChange={(e) => {
-                        setError((v) => (''))
-                        setPass(e.target.value)
+                        setError('')
+                        setFormData({
+                            ...formData,
+                            password: e.target.value
+                        })
                     }}
 
                 />
                 <Input
                     label={'Confirm Password'}
                     type="password"
-                    onChange={e => setPasswordAgain(e.target.value)}
+                    onChange={e => setFormData({
+                        ...formData,
+                        passwordAgain: e.target.value
+                    })}
                     placeholder='please confirm your password'
                 />
                 <PasswordChecklist
                     rules={["minLength", "specialChar", "number", "capital", "match"]}
                     minLength={8}
-                    value={password}
-                    valueAgain={passwordAgain}
+                    value={formData.password}
+                    valueAgain={formData.passwordAgain}
                     onChange={(isValid) => {
                         const btn = document.querySelector('.sign')
                         if (isValid) {

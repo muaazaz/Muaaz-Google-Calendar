@@ -11,17 +11,19 @@ import {createEvent} from "../Redux/event/eventAction"
 
 
 const CreateEvent = () => {
-  let strt = ''
   const history = useHistory(),
     dispatch = useDispatch(),
     [browserLocations, setBrowserLocations]=useState([]),
-    [allDay, setAllDay] = useState(false),
-    [item, setItem] = useState(""),
-    [location, setLocation] = useState(""),
-    [start, setStart] = useState('ALL-DAY'),
-    [end, setEnd] = useState(""),
-    [owner, setOwner] = useState(""),
-    [error, setError] = useState("")
+    [error, setError] = useState(),
+    [formData, setFormData] = useState({
+      allDay: false,
+      item: "",
+      location: "",
+      start: "ALL-DAY",
+      end: "",
+      owner: "",
+      strt: ""
+    })
 
     const calllLocationApi = async()=>{
       await setBrowserLocations( await getLocations())
@@ -29,14 +31,17 @@ const CreateEvent = () => {
 
   useEffect(() => {
     const { id } = getCookiesData()
-    setOwner(id);
+    setFormData({
+      ...formData,
+      owner: id
+    })
     calllLocationApi()
 
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createEvent({ start, end, item, location, owner, allDay, strt }))
+    dispatch(createEvent(formData))
     history.push('/dashboard')
   };
 
@@ -55,9 +60,12 @@ const CreateEvent = () => {
           label={'Name'}
           maxLength={30}
           placeholder={"please enter an name for event"}
-          value={item}
+          value={formData.item}
           onChange={(e) => {
-            setItem(e.target.value);
+            setFormData({
+              ...formData,
+              item: e.target.value
+            })
           }}
         />
 
@@ -75,17 +83,23 @@ const CreateEvent = () => {
               <Select
                 type={'start'}
                 className={"start-time"}
-                value={start}
+                value={formData.start}
                 label={'Start'}
                 disabled={false}
                 onChange={(e) => {
-                  setError((e) => (undefined))
-                  setStart(e.target.value)
-                  var id = "";
+                  setError(undefined)
+                  setFormData({
+                    ...formData,
+                    start: e.target.value
+                  })
+                  let id = "";
                   document.querySelectorAll(".start").forEach((opt) => {
                     if (opt.value === e.target.value) {
                       id = opt.id;
-                      strt=id;
+                      setFormData({
+                        ...formData,
+                        strt: id
+                      })
                     }
                   });
                   document.querySelectorAll(".end").forEach((opt) => {
@@ -99,12 +113,15 @@ const CreateEvent = () => {
               <Select
                 type={'end'}
                 className={"end-time"}
-                value={end}
+                value={formData.end}
                 label={'End'}
                 disabled={true}
                 onChange={(e) => {
-                  setError((e) => (undefined))
-                  setEnd(e.target.value)
+                  setError(undefined)
+                  setFormData({
+                    ...formData,
+                    end: e.target.value
+                  })
                 }}
               />
             </div>
@@ -115,8 +132,11 @@ const CreateEvent = () => {
           sx={{ width: "100%", marginTop: '20px' }}
           renderInput={(params) => <TextField {...params} label="Location" />}
           onChange={(e) => {
-            setError((e) => (undefined))
-            setLocation(e.target.textContent);
+            setError(undefined)
+            setFormData({
+              ...formData,
+              location: e.target.value
+            })
           }}
         />
         {error && <h5 className="error">{error}</h5>}

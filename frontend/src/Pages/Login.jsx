@@ -9,9 +9,11 @@ const Login = () => {
   const history = useHistory(),
     dispatch = useDispatch(),
     data = useSelector((state) => state.userValidation),
-    [email, setEmail] = useState(""),
-    [password, setPass] = useState(""),
-    [userName, setUserName] = useState(""),
+    [formData, setFormData] = useState({
+      email: "",
+      password: "",
+      userName: ""
+    }),
     [error, setError] = useState(""),
     [isUserName, setIsUserName] = useState(false),
     [isEmail, setIsEmail] = useState(false),
@@ -26,7 +28,7 @@ const Login = () => {
   },[data])
 
   const handleSubmit = async () => {
-    dispatch(logIn({  email, userName, password }))
+    dispatch(logIn(formData))
   };
 
   const handleEmail = () => {
@@ -70,11 +72,14 @@ const Login = () => {
           <Input
             label={'Email'}
             maxLength={30}
-            value={email}
+            value={formData.email}
             placeholder={"please enter your email"}
             onChange={(e) => {
-              setError((v) => "");
-              setEmail(e.target.value);
+              setError("");
+              setFormData({
+                ...formData,
+                email: e.target.value
+              })
             }}
           />
         }
@@ -83,11 +88,14 @@ const Login = () => {
           <Input
             label={'User Name'}
             maxLength={30}
-            value={userName}
+            value={formData.userName}
             placeholder={'please enter you user name'}
             onChange={(e) => {
-              setError((e) => '')
-              setUserName(e.target.value)
+              setError("")
+              setFormData({
+                ...formData,
+                userName: e.target.value
+              })
             }}
           />
         }
@@ -97,15 +105,21 @@ const Login = () => {
             label={'Password'}
             type="password"
             minLength={8}
-            value={password}
+            value={formData.password}
             placeholder={"please enter your password"}
             onChange={(e) => {
               if (e.target.value.length < 8) {
-                setError((v) => "pasword is wrong");
-                setPass((p) => e.target.value);
+                setError("pasword is short");
+                setFormData({
+                  ...formData,
+                  password: e.target.value
+                })
               } else {
-                setError((v) => "");
-                setPass((p) => e.target.value);
+                setError("");
+                setFormData({
+                  ...formData,
+                  password: e.target.value
+                })
               }
             }}
           />
