@@ -13,7 +13,6 @@ const Calendar = () => {
         [date, setDate] = useState('')
 
     const setData = async () => {
-        console.log(data.events);
         data.events.forEach((event) => {
             if (event.allDay) {
                 arr1.push(event)
@@ -38,7 +37,6 @@ const Calendar = () => {
         //Create Daily events
         createAllDayEvent(allDayEvents);
         //Creating timely events
-        // console.log(timelyEvents);
          createEvents(timelyEvents);
     },[allDayEvents, timelyEvents])
 
