@@ -50,9 +50,15 @@ const CreateEvent = () => {
       <h1>Create An Event:</h1>
       <p>Please select what type of event you want to create:</p>
       <div className="options">
-        <input type="radio" id="allday" name="events-option" onChange={() => { setAllDay(true) }} />
+        <input type="radio" id="allday" name="events-option" onChange={() => { setFormData({
+          ...formData,
+          allDay: true
+        }) }} />
         <label htmlFor="allday">All-Day Event</label>
-        <input type="radio" id="timely" name="events-option" defaultChecked onChange={() => { setAllDay(false) }} />
+        <input type="radio" id="timely" name="events-option" defaultChecked onChange={() => { setFormData({
+          ...formData,
+          allDay: true
+        }) }} />
         <label htmlFor="timely">Timely Event</label><br />
       </div>
       <form onSubmit={handleSubmit}>
@@ -70,7 +76,7 @@ const CreateEvent = () => {
         />
 
         {
-          allDay ?
+          formData.allDay ?
             <div>
               <Input
                 label={'Time'}

@@ -20,7 +20,7 @@ const EditEvents = () => {
       start: "ALL-DAY",
       end: "",
       strt: ""
-    })
+    }),
     [once, setOnce] = useState(true),
     [error, setError] = useState();
 
@@ -54,7 +54,7 @@ const EditEvents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //Calling API to update event data 
-    dispatch(editEvent(formData))
+    dispatch(editEvent(id,formData))
     history.push("/dashboard");
   };
 
@@ -75,7 +75,7 @@ const EditEvents = () => {
             })
           }}
         />
-        {allDay ?
+        {formData.allDay ?
           <>
             <Input
               label={'Time'}

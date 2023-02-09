@@ -33,7 +33,7 @@ const Navbar = () => {
                                 <span className='eml'>Welcome ! {email}</span>
                             </li>
                             <li>
-                                <Link className='crt lnk' to='/event'>Create Event</Link>
+                                <Link className='crt lnk' to='/create/event'>Create Event</Link>
                             </li>
                             <li>
                                 <button className='lgot' onClick={() => {

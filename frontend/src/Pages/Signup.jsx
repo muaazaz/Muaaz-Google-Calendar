@@ -31,7 +31,7 @@ const Signup = () => {
         },[data])
     //handeling form submition for signUp
     const handleSubmit = async () => {
-        if (firstName === lastName) {
+        if (formData.firstName === formData.lastName) {
             setError('First-name and Last-name cannot be same')
         } else {
             dispatch(signUp(formData))

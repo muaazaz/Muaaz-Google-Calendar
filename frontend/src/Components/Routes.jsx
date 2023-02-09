@@ -23,7 +23,7 @@ const Routes = () => {
 
                         <PrivateRoutes path={"/dashboard"} component={Dashboard} />
                         <PrivateRoutes path={"/calendar"} component={Calendar} />
-                        <PrivateRoutes path={"/event"} component={CreateEvent} />
+                        <PrivateRoutes path={"/create/event"} component={CreateEvent} />
                         <PrivateRoutes path={"/event/:id"} component={EditEvents} />
 
                         <Route path="*">

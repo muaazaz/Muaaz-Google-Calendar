@@ -11,14 +11,15 @@ export const SET_EVENTS = 'Set_Events'
 export const SET_EVENT_DETAILS = 'Set_Event_Details'
 export const DELETE_EVENT = 'Delete_Event'
 export const UPDATE_EVENT = 'Update_Event'
+const where = encodeURIComponent(
+    JSON.stringify({
+        name: {$exists: true,},
+    })
+);
 export const apiUrl = `https://parseapi.back4app.com/classes/City?limit=1000&order=name&where=${where}`
 export const headers = {
     "X-Parse-Application-Id": "q1QfxhDv1KLM5OPzUFzZRIvYERUAFLWEWX9r053J",
     "X-Parse-Master-Key": "POcTYBgrQ52WGn2lJrcQrYwFFM44uhQ2eqmoy8hS",
 }
 
-const where = encodeURIComponent(
-    JSON.stringify({
-        name: {$exists: true,},
-    })
-);
+
