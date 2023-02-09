@@ -8,7 +8,7 @@ const genToken = (id)=>{
     })
 }
 
-const post_signup=async (req, res)=>{
+const signup=async (req, res)=>{
     try {
         const user = new User(req.body)
         await user.save()
@@ -26,7 +26,7 @@ const post_signup=async (req, res)=>{
     }
 }
 
-const post_login=async (req, res)=>{
+const login=async (req, res)=>{
     try {
         const user = await User.verifyCredentials(req.body.email, req.body.userName, req.body.password)
         const token = genToken(user._id)
@@ -45,6 +45,6 @@ const post_login=async (req, res)=>{
 
 
 module.exports = {
-    post_signup,
-    post_login
+    signup,
+    login
 }
