@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { createAllDayEvent, createEvents, createTime, getCurrentDate } from "../Utils/events";
 
 const Calendar = () => {
-    var arr2 = [];
-    var arr1 = [];
+    let timelyArray = [],
+        allDayEventsArray = []
     const [timelyEvents, setTimelyEvents] = useState(null),
         data = useSelector((state) => state.eventReducer),
         [allDayEvents, setAllDayEvents] = useState([]),
@@ -15,13 +15,13 @@ const Calendar = () => {
     const setData = async () => {
         data.events.forEach((event) => {
             if (event.allDay) {
-                arr1.push(event)
+                allDayEventsArray.push(event)
             } else {
-                arr2.push(event)
+                timelyArray.push(event)
             }
         })
-        setTimelyEvents(arr2)
-        setAllDayEvents(arr1)
+        setTimelyEvents(timelyArray)
+        setAllDayEvents(allDayEventsArray)
     }
 
     useEffect(() => {

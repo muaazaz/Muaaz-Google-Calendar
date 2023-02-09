@@ -8,7 +8,7 @@ import { getLocations } from "../Utils/location";
 import { editEvent } from "../Redux/event/eventAction"
 
 const EditEvents = () => {
-  var strt = ''
+  let strt = ''
   const { id } = useParams(),
     data = useSelector((state) => state.eventReducer),
     dispatch = useDispatch(),
@@ -86,7 +86,7 @@ const EditEvents = () => {
               onChange={(e) => {
                 setError((e) => (undefined))
                 setStart(e.target.value)
-                var id = "";
+                let id = "";
                 document.querySelectorAll(".start").forEach((opt) => {
                   if (opt.value === e.target.value) {
                     id = opt.id;

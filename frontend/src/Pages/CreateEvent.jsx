@@ -11,7 +11,7 @@ import {createEvent} from "../Redux/event/eventAction"
 
 
 const CreateEvent = () => {
-  var strt = ''
+  let strt = ''
   const history = useHistory(),
     dispatch = useDispatch(),
     [browserLocations, setBrowserLocations]=useState([]),

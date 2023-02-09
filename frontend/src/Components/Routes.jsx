@@ -11,8 +11,6 @@ import Calendar from "../Pages/Calendar";
 import PublicRoutes from "../Routes/Public";
 import PrivateRoutes from "../Routes/Private";
 
-
-
 const Routes = () => {
     return (
         <div className="App">
