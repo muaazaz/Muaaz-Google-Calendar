@@ -2,7 +2,6 @@ import { apiUrl, headers } from "../Constants/constants"
 
 export const getLocations = async()=>{
     let dataArray = []
-
     const res = await fetch(
         apiUrl,
         {
@@ -11,7 +10,7 @@ export const getLocations = async()=>{
     )
     const data = await res.json()
     data.results.forEach((element) => {
-        if (!dataArray.includes(element)) {
+        if (!dataArray.includes(element.name)) {
             dataArray.push(element.name);
         }
 })

@@ -12,10 +12,10 @@ const create_event = async(req, res)=>{
     }
 }
 const get_events = async(req, res)=>{
-
     try {
-        const events =await Event.find({owner: req.user._id}).sort({strt:1})
-        res.send({events})
+        const allDayEvents =await Event.find({allDay: true, owner: req.user._id})
+        const timelyEvents =await Event.find({allDay: false, owner: req.user._id}).sort({start:1})
+        res.send({allDayEvents, timelyEvents})
     } catch (e) {
         const error = e.mesaage
         res.send({error})
@@ -54,7 +54,6 @@ const edit_event = async(req,res)=>{
         event.end = req.body.end
         event.item = req.body.item
         event.location = req.body.location
-        event.strt = req.body.strt
         await event.save()
         res.status(200).send({event})
     } catch (e) {

@@ -149,7 +149,6 @@ body {
   margin:0 auto;
   max-width:90%;
   width: auto;
-  z-index: 1;
   overflow: hidden;
   box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -177,36 +176,12 @@ body {
   align-items: flex-end;
 }
 /* Time Table */
-#AM {
+.time-table {
   display: flex;
-  border-top: 2px solid red;
-  background-color: rgb(254, 246, 248);
-}
-
-#PM {
-  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   border-style: none;
-  border-top: 2px solid skyblue;
-  background-color: rgb(238, 254, 254);
-}
-
-#red {
-  color: red;
-}
-
-#blue {
-  color: skyblue;
-}
-
-#time span {
-  font-size: 60px;
-  font-weight: lighter;
-  text-align: center;
-  text-indent: 1rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  padding-top: 2rem;
-  padding-right: 1rem;
-  z-index: 0;
+  background-color: #F5E1E1;
 }
 
 .clck {
@@ -218,24 +193,25 @@ body {
   font-weight: lighter;
 }
 
-.full {
+.timely-divs-full {
   display: flex;
-  border-top: 1px solid #373737;
-  width: 95%;
-  height: 4rem;
-}
-
-.full1 {
-  display: flex;
-  width: 95%;
-  height: 4rem;
-}
-
-.half {
-  display: flex;
-  border-top: 1px solid #373737;
+  border-top: 1px solid darkslategrey;
   width: 90%;
   height: 4rem;
+}
+.timely-divs-half {
+  display: flex;
+  border-top: 1px solid darkslategrey;
+  width: 85%;  
+  height: 4rem;
+}
+.time-slot{
+  width: 20%;
+}
+.time-logo{
+  color: darkred;
+  font-size: 5rem;
+  margin: 3rem auto;
 }
 /* Error Text */
 .error{
@@ -251,6 +227,7 @@ body {
   width: 100%;
   border: 2px solid white;
   border-radius: 10px;
+  background-color:#0000FF ;
   box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -261,7 +238,11 @@ body {
   justify-content: center;
   align-items: center;
   width: 15%;
-
+}
+.content-item{
+  color: whitesmoke;
+  font-size: small;
+  font-weight: 900;
 }
 .loc {
   color: rgb(30, 143, 30);
@@ -394,14 +375,12 @@ h1 {
   margin: 5px;
   box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.event-div > h1 ,p{
-  color: darkslateblue;
-}
-.event-div > span{
+.event-div > p{
   color: #f1356d;
+  font-weight:900;
 }
 .tag{
-  color: cadetblue;
+  color:steelblue;
 }
 .options{
   display: flex;
@@ -435,4 +414,10 @@ h1 {
 .location{
   width: 100%;
   height: 30px;
+}
+.timers{
+  color:blueviolet;
+}
+.time{
+  color: grey;
 }

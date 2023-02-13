@@ -4,13 +4,13 @@ import { fetchCall } from "../../Utils/fetchCall"
 
 
 function* createEvent({ payload }) {
-    const { start, end, item, location, owner, allDay, strt } = payload
-    yield fetchCall("/event", "POST", { start, end, item, location, owner, allDay, strt })
+    const { start, end, item, location, owner, allDay} = payload
+    yield fetchCall("/event", "POST", { start, end, item, location, owner, allDay})
 }
 
 function* getEvents() {
     const data = yield fetchCall('/events', 'GET')
-    yield put({ type: SET_EVENTS, payload: data.events })
+    yield put({ type: SET_EVENTS, payload: {allDayEvents: data.allDayEvents, timelyEvents: data.timelyEvents} })
 }
 
 function* getEventDetails({ payload }) {
@@ -25,8 +25,9 @@ function* deleteEvent({ payload }) {
 }
 
 function* editEvent({ payload }) {
-    const { id, start, end, item, location, strt } = payload
-        yield fetchCall("/event/" + id, "PUT", { start, end, item, location, strt })
+    
+    const { id, formData} = payload
+        yield fetchCall("/event/" + id, "PUT", formData)
 }
 
 export default function* eventSaga() {

@@ -11,19 +11,13 @@ const Dashboard = () => {
     dispatch = useDispatch(),
     data = useSelector((state)=>state.eventReducer)
 
-  const get_Events = async()=>{
-    dispatch(getEvents())
-  } 
-
   useEffect(() => {
       //Calling API
-      get_Events()
-
-      if(data.events){
-        setEvents(data.events)
+      dispatch(getEvents())
+      if(data.allDayEvents && data.timelyEvents){
+        setEvents(data.allDayEvents.concat(data.timelyEvents))
       }
-      
-  }, [data.events]);
+  }, [data]);
 
   //Click functions
   //Showing calendar page
@@ -45,11 +39,21 @@ const Dashboard = () => {
       {events &&
         events.map((event) => (
           <div className="event-div" key={event._id}>
-            <h2 className="tag"> Event :</h2>
-            <h1>{event.start}</h1>
-            <h1>{event.end}</h1>
-            <span>{event.item}</span>
-            <span>{event.location}</span>
+            <h2 className="tag">Events :</h2>
+            {event.allDay ? 
+            <h1 className="time">ALL-DAY</h1> 
+            :
+            <>
+            <h1 className="timers">From : </h1>
+            <h1 className="time">{event.start}</h1>
+            <h1 className="timers">To : </h1>
+            <h1 className="time">{event.end}</h1>
+            </>
+            }
+            <h3 className="tag">Name : </h3>
+            <p>{event.item}</p>
+            <h3 className="tag">Location : </h3>
+            <p>{event.location}</p>
             <button
               className="edt"
               onClick={() => {

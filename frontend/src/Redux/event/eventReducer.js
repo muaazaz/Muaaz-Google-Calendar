@@ -5,7 +5,8 @@ export const eventReducer = (state = [], action) => {
         case SET_EVENTS:
             return{
                 ...state,
-                events: action.payload
+                timelyEvents: action.payload.timelyEvents,
+                allDayEvents: action.payload.allDayEvents
             }
         case SET_EVENT_DETAILS:
             return{
@@ -15,7 +16,8 @@ export const eventReducer = (state = [], action) => {
         case DELETE_EVENT:
             return{
                 ...state,
-                events: state.events.filter(event=>event._id !== action.payload)
+                timelyEvents: state.timelyEvents.filter(event=>event._id !== action.payload),
+                allDayEvents: state.allDayEvents.filter(event=>event._id !== action.payload)
             }
         default:
             return state

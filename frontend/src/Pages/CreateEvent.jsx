@@ -19,14 +19,13 @@ const CreateEvent = () => {
       allDay: false,
       item: "",
       location: "",
-      start: "ALL-DAY",
+      start: "",
       end: "",
-      owner: "",
-      strt: ""
+      owner: ""
     })
 
     const calllLocationApi = async()=>{
-      await setBrowserLocations( await getLocations())
+      setBrowserLocations( await getLocations())
     }
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const CreateEvent = () => {
         <label htmlFor="allday">All-Day Event</label>
         <input type="radio" id="timely" name="events-option" defaultChecked onChange={() => { setFormData({
           ...formData,
-          allDay: true
+          allDay: false
         }) }} />
         <label htmlFor="timely">Timely Event</label><br />
       </div>
@@ -102,10 +101,6 @@ const CreateEvent = () => {
                   document.querySelectorAll(".start").forEach((opt) => {
                     if (opt.value === e.target.value) {
                       id = opt.id;
-                      setFormData({
-                        ...formData,
-                        strt: id
-                      })
                     }
                   });
                   document.querySelectorAll(".end").forEach((opt) => {
@@ -141,7 +136,7 @@ const CreateEvent = () => {
             setError(undefined)
             setFormData({
               ...formData,
-              location: e.target.value
+              location: e.target.textContent
             })
           }}
         />

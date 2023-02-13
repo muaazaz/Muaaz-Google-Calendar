@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 const eventSchema = new mongoose.Schema({
     start:{
-        type: String,
+        type: Number,
         maxLength:10
     },end:{
-        type: String,
+        type: Number,
         maxLength:10
     },item:{
         type: String,
@@ -20,10 +20,6 @@ const eventSchema = new mongoose.Schema({
     allDay:{
         type:Boolean,
         require: true
-    },
-    strt:{
-        type:Number,
-        maxLength:10
     }
 })
 

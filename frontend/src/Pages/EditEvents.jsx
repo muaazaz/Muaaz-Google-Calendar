@@ -17,27 +17,15 @@ const EditEvents = () => {
       allDay: false,
       item: "",
       location: "",
-      start: "ALL-DAY",
-      end: "",
-      strt: ""
+      start: "",
+      end: ""
     }),
     [once, setOnce] = useState(true),
     [error, setError] = useState();
 
   const calllLocationApi = async () => {
-    await setBrowserLocations(await getLocations())
+    setBrowserLocations(await getLocations())
   }
-
-  //Setting previous state of data
-  const setPrevious = (event) => {
-    setFormData({
-      item: event.item,
-      location: event.location,
-      start: event.start,
-      end: event.end,
-      allDay: event.allDay
-    })
-  };
 
   useEffect(() => {
     if (once) {
@@ -47,14 +35,20 @@ const EditEvents = () => {
       calllLocationApi()
     }
     if (data.eventDetails) {
-      setPrevious(data.eventDetails)
+      setFormData({
+        item: data.eventDetails.item,
+        location: data.eventDetails.location,
+        start: data.eventDetails.start,
+        end: data.eventDetails.end,
+        allDay: data.eventDetails.allDay
+      })
     }
   }, [data.eventDetails]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     //Calling API to update event data 
-    dispatch(editEvent(id,formData))
+    dispatch(editEvent({id,formData}))
     history.push("/dashboard");
   };
 
@@ -101,10 +95,6 @@ const EditEvents = () => {
                 document.querySelectorAll(".start").forEach((opt) => {
                   if (opt.value === e.target.value) {
                     id = opt.id;
-                    setFormData({
-                      ...formData,
-                      strt: id
-                    })
                   }
                 });
                 document.querySelectorAll(".end").forEach((opt) => {
@@ -141,7 +131,7 @@ const EditEvents = () => {
             setError(undefined)
             setFormData({
               ...formData,
-              location: e.target.value
+              location: e.target.textContent
             })
           }}
         />
