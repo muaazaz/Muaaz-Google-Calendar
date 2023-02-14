@@ -19,39 +19,40 @@ export const calculateStart = (event) => {
 export const calculateHeight = (event) => {
   let height = "0",
     halfHeight =
-      Math.round(event.end - event.start) - (event.end - event.start) === 0.5
-        ? 1
-        : 0;
-  height =
-    ((parseInt(event.end - event.start) * 2 + halfHeight) * 4).toString() +
-    "rem";
-  return height;
+      Math.round(event.end - event.start) - (event.end - event.start) === 0.5 ? 1 : 0;
+    height = ((parseInt(event.end - event.start) * 2 + halfHeight) * 4).toString() + "rem";
+    return height;
 };
 //To calculate margin for child events to position them correctly
 export const calculateMargin = (event, childEvent) => {
   let marginTop = "0",
     halfDiff =
       Math.round(event.start - childEvent.start) -
-        (event.start - childEvent.start) ===
-      0.5
-        ? 1
-        : 0;
-  marginTop =
-    ((parseInt(event.start - childEvent.start) * 2 + halfDiff) * 4).toString() +
-    "rem";
-  return marginTop;
+        (event.start - childEvent.start) === 0.5 ? 1 : 0;
+    marginTop = ((parseInt(Math.abs(event.start - childEvent.start)) * 2 + halfDiff) * 4).toString() + "rem";
+    return marginTop;
 };
-//To add elements that are child in child array to compare
+//To add events that are child in child array to stop re rendering those events
 export let childArray = [];
 export const checkChild = (event, compareArray) => {
+  let eventChilds = []
   for (let i = 0; i < compareArray.length; i++) {
     if (
-      event.end - compareArray[i].start > 0 &&
-      event.start !== compareArray[i].start &&
-      event.end !== compareArray[i].end
-    ) {
+      (event.end - compareArray[i].start > 0 &&
+      (event.start !== compareArray[i].start &&
+      event.end !== compareArray[i].end)) || event.end === compareArray[i].start
+    ){
       childArray.push(compareArray[i]._id);
-      return compareArray[i];
+      eventChilds.push(compareArray[i])
     }
   }
+  return eventChilds
 };
+//To disable select options for end time that are equals or lesser than start time
+export const disableEndTimeArray = (time)=>{
+  let timeCheckArray = []
+  for(let i = 9; i<=time; i+=0.5){
+    timeCheckArray.push(i);
+  }
+  return timeCheckArray
+}

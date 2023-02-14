@@ -6,6 +6,7 @@ import Input from "../Components/Shared_Components/Input";
 import Select from "../Components/Shared_Components/Select";
 import { getLocations } from "../Utils/location";
 import { editEvent } from "../Redux/event/eventAction"
+import { disableEndTimeArray } from "../Utils/events"
 
 const EditEvents = () => {
   const { id } = useParams(),
@@ -21,7 +22,8 @@ const EditEvents = () => {
       end: ""
     }),
     [once, setOnce] = useState(true),
-    [error, setError] = useState();
+    [error, setError] = useState(),
+    [disableEndTime, setDisableEndTime] = useState(true)
 
   const calllLocationApi = async () => {
     setBrowserLocations(await getLocations())
@@ -86,38 +88,28 @@ const EditEvents = () => {
               label={'Start'}
               disabled={false}
               onChange={(e) => {
-                setError(undefined)
-                setFormData({
-                  ...formData,
-                  start: e.target.value
-                })
-                let id = "";
-                document.querySelectorAll(".start").forEach((opt) => {
-                  if (opt.value === e.target.value) {
-                    id = opt.id;
-                  }
-                });
-                document.querySelectorAll(".end").forEach((opt) => {
-                  if (parseFloat(opt.id) <= parseFloat(id)) {
-                    opt.disabled = true;
-                  }
-                });
-                document.querySelector(".end-time").disabled = false;
-              }}
+                  setError(undefined)
+                  setFormData({
+                    ...formData,
+                    start: e.target.value
+                  })
+                  setDisableEndTime(false)
+                }}
             />
             <Select
-              time={'end'}
-              className={"end-time"}
-              value={formData.end}
-              label={'End'}
-              disabled={true}
-              onChange={(e) => {
-                setError(undefined)
-                setFormData({
-                  ...formData,
-                  end: e.target.value
-                })
-              }}
+                type={'end'}
+                className={"end-time"}
+                value={formData.end}
+                label={'End'}
+                disabled={disableEndTime}
+                timeCheckArray={disableEndTimeArray(formData.start)}
+                onChange={(e) => {
+                  setError(undefined)
+                  setFormData({
+                    ...formData,
+                    end: e.target.value
+                  })
+                }}
             />
           </>
         }

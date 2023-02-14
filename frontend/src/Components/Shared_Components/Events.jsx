@@ -1,5 +1,9 @@
-import { calculateHeight, calculateMargin, calculateStart } from "../../Utils/events";
-const Events = ({ event, allDay, childEvent}) => {
+import {
+  calculateHeight,
+  calculateMargin,
+  calculateStart,
+} from "../../Utils/events";
+const Events = ({ event, allDay, eventChildArray }) => {
   return (
     <>
       {allDay ? (
@@ -15,18 +19,22 @@ const Events = ({ event, allDay, childEvent}) => {
             <h1 className="content-item">{event.item}</h1>
             <p className="content-item">{event.location}</p>
           </div>
-                {childEvent && 
-                    <div
-                      className="events"
-                      style={{ height: calculateHeight(childEvent), marginTop: calculateMargin(event, childEvent)}}
-                    >
-                      <div className="content">
-                        <p className="content-item">{calculateStart(childEvent)}</p>
-                        <h1 className="content-item">{childEvent.item}</h1>
-                        <p className="content-item">{childEvent.location}</p>
-                      </div>
-                    </div>
-                  }
+          {eventChildArray &&
+            eventChildArray.map((childEvent) => (
+              <div
+                className="child events"
+                style={{
+                  height: calculateHeight(childEvent),
+                  marginTop: calculateMargin(event, childEvent),
+                }}
+              >
+                <div className="content">
+                  <p className="content-item">{calculateStart(childEvent)}</p>
+                  <h1 className="content-item">{childEvent.item}</h1>
+                  <p className="content-item">{childEvent.location}</p>
+                </div>
+              </div>
+            ))}
         </div>
       )}
     </>

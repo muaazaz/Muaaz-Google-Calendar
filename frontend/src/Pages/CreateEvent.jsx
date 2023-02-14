@@ -8,7 +8,7 @@ import Select from "../Components/Shared_Components/Select";
 import { getCookiesData } from "../Utils/cookies";
 import { getLocations } from "../Utils/location";
 import {createEvent} from "../Redux/event/eventAction"
-
+import { disableEndTimeArray } from "../Utils/events"
 
 const CreateEvent = () => {
   const history = useHistory(),
@@ -22,7 +22,8 @@ const CreateEvent = () => {
       start: "",
       end: "",
       owner: ""
-    })
+    }),
+    [disableEndTime, setDisableEndTime] = useState(true)
 
     const calllLocationApi = async()=>{
       setBrowserLocations( await getLocations())
@@ -73,7 +74,6 @@ const CreateEvent = () => {
             })
           }}
         />
-
         {
           formData.allDay ?
             <div>
@@ -97,18 +97,7 @@ const CreateEvent = () => {
                     ...formData,
                     start: e.target.value
                   })
-                  let id = "";
-                  document.querySelectorAll(".start").forEach((opt) => {
-                    if (opt.value === e.target.value) {
-                      id = opt.id;
-                    }
-                  });
-                  document.querySelectorAll(".end").forEach((opt) => {
-                    if (parseFloat(opt.id) <= parseFloat(id)) {
-                      opt.disabled = true;
-                    }
-                  });
-                  document.querySelector(".end-time").disabled = false;
+                  setDisableEndTime(false)
                 }}
               />
               <Select
@@ -116,7 +105,8 @@ const CreateEvent = () => {
                 className={"end-time"}
                 value={formData.end}
                 label={'End'}
-                disabled={true}
+                disabled={disableEndTime}
+                timeCheckArray={disableEndTimeArray(formData.start)}
                 onChange={(e) => {
                   setError(undefined)
                   setFormData({

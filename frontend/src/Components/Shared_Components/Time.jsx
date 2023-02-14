@@ -33,7 +33,7 @@ const Time = ({ events }) => {
                     <Events
                       event={event}
                       allDay={false}
-                      childEvent={checkChild(event, events.slice(index + 1, events.length))}
+                      eventChildArray={checkChild(event, events.slice(index + 1, events.length))}
                     />
                   )}
                 </>
