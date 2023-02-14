@@ -1,35 +1,5 @@
-const Events = ({ event, allDay, compareArray, addChild }) => {
-
-  const calculateStart = (event) => {
-    let start = "",
-      zone = "";
-    let split = event.start.toString().split(".");
-    if (split[0] >= 12) {
-      zone = "PM";
-    } else {
-      zone = "AM";
-    }
-    if (split[1]) {
-      start = split[0] + ":30" + zone;
-    } else {
-      start = split[0] + ":00" + zone;
-    }
-    return start
-  };
-
-  const calculateHeight = (event) => {
-    let height = "",
-      halfHeight = Math.round(event.end - event.start) - (event.end - event.start) === 0.5 ? 1 : 0;
-    height = ((parseInt(event.end - event.start) * 2  + halfHeight)* 4).toString() + "rem";
-    return height;
-  };
-  const calculateMargin = (event, compareEvent)=>{
-    let marginTop = "",
-      halfDiff = Math.round(event.start - compareEvent.start) - (event.start - compareEvent.start) === 0.5 ? 1 : 0;
-    marginTop = ((parseInt(event.start - compareEvent.start) * 2  + halfDiff)* 4).toString() + "rem";
-    return marginTop
-
-  }
+import { calculateHeight, calculateMargin, calculateStart } from "../../Utils/events";
+const Events = ({ event, allDay, childEvent}) => {
   return (
     <>
       {allDay ? (
@@ -45,26 +15,18 @@ const Events = ({ event, allDay, compareArray, addChild }) => {
             <h1 className="content-item">{event.item}</h1>
             <p className="content-item">{event.location}</p>
           </div>
-          {compareArray.map((compareEvent) => {
-            return (
-              <>
-                {(event.end - compareEvent.start > 0 &&
-                  (event.start !== compareEvent.start &&
-                  event.end !== compareEvent.end)) && (
+                {childEvent && 
                     <div
                       className="events"
-                      style={{ height: calculateHeight(compareEvent), marginTop: calculateMargin(event, compareEvent)}}
+                      style={{ height: calculateHeight(childEvent), marginTop: calculateMargin(event, childEvent)}}
                     >
                       <div className="content">
-                        <p className="content-item">{calculateStart(compareEvent)}</p>
-                        <h1 className="content-item">{compareEvent.item}</h1>
-                        <p className="content-item">{compareEvent.location}</p>
+                        <p className="content-item">{calculateStart(childEvent)}</p>
+                        <h1 className="content-item">{childEvent.item}</h1>
+                        <p className="content-item">{childEvent.location}</p>
                       </div>
                     </div>
-                  )}
-              </>
-            );
-          })}
+                  }
         </div>
       )}
     </>

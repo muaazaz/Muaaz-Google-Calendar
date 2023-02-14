@@ -13,7 +13,7 @@ const create_event = async(req, res)=>{
 }
 const get_events = async(req, res)=>{
     try {
-        const allDayEvents =await Event.find({allDay: true, owner: req.user._id})
+        const allDayEvents =await Event.find({allDay: true, owner: req.user._id}).sort({createdAt: 1})
         const timelyEvents =await Event.find({allDay: false, owner: req.user._id}).sort({start:1})
         res.send({allDayEvents, timelyEvents})
     } catch (e) {

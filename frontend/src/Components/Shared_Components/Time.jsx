@@ -1,19 +1,11 @@
-import { useState } from "react";
 import { useEffect } from "react";
 import { timeArray } from "../../Constants/constants";
+import { checkChild, childArray } from "../../Utils/events";
 import Events from "./Events";
 
 const Time = ({ events }) => {
-  useEffect(() => {}, [events]);
-
-  let i = 8.5;
-  const [childArray, setChildArray] = useState([]);
-  const addChild = (event) => {
-    setChildArray([
-        ...childArray,
-        event
-    ])
-  }
+  let i = 8.5
+  useEffect(()=>{},[events])
 
   return (
     <>
@@ -37,12 +29,11 @@ const Time = ({ events }) => {
             {events.map((event, index) => {
               return (
                 <>
-                  {event.start === i && !childArray.includes(event) && (
+                  {(event.start === i && (!childArray.includes(event._id))) && (
                     <Events
                       event={event}
                       allDay={false}
-                      compareArray={events.slice(index, events.length)}
-                      addChild={addChild}
+                      childEvent={checkChild(event, events.slice(index + 1, events.length))}
                     />
                   )}
                 </>
@@ -54,5 +45,4 @@ const Time = ({ events }) => {
     </>
   );
 };
-
 export default Time;
