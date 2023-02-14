@@ -38,9 +38,9 @@ export const checkChild = (event, compareArray) => {
   let eventChilds = []
   for (let i = 0; i < compareArray.length; i++) {
     if (
-      (event.end - compareArray[i].start > 0 &&
+      (event.end - compareArray[i].start >= 0 &&
       (event.start !== compareArray[i].start &&
-      event.end !== compareArray[i].end)) || event.end === compareArray[i].start
+      event.end !== compareArray[i].end))
     ){
       childArray.push(compareArray[i]._id);
       eventChilds.push(compareArray[i])
